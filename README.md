@@ -1,2 +1,26 @@
-# Django-expense-tracker-
-Django Expense Tracker is a web-based application built with Python and Django that helps users efficiently manage and track their daily expenses. It allows users to record, categorize, and analyze their spending habits through a simple and intuitive interface
+# Python Machine Test Project
+
+A Django REST API project for user management and expense tracking.
+
+## Setup Instructions
+
+1. Clone the repository
+2. Create virtual environment: `python -m venv`
+3. Activate virtual environment:
+   - Windows: `venv\Scripts\activate`
+   - Mac/Linux: `source venv/bin/activate`
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run migrations: `python manage.py migrate`
+6. Create superuser: `python manage.py createsuperuser`
+7. Run server: `python manage.py runserver`
+
+## How to Run the Server
+
+```bash
+python manage.py runserver
+
+Test Superuser Account :
+- Username: test1
+- Email: test123@gmail.com
+
+- Password: Suraj@123
