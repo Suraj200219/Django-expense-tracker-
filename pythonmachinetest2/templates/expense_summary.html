@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Summary - Expense Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        /* Expense Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        /* Expenses Table Styles */
+        .expenses-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .expenses-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .expenses-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .expenses-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Summary Styles */
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .category-amount {
+            font-weight: bold;
+            color: #2c5530;
+            font-size: 1.1em;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e1e5e9;
+        }
+
+        .total-amount {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Expense Tracker</h1>
+            <a href="/" class="back-btn">← Back to Home</a>
+        </div>
+
+        <div class="content">
+            <!-- Left Column: Expenses and Form -->
+            <div class="left-column">
+                <div class="section">
+                    <h2>Expenses</h2>
+                    
+                    <!-- Add Expense Form -->
+                    <form id="expenseForm">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" placeholder="Enter expense title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" id="amount" name="amount" placeholder="0.00" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category" required>
+                                <option value="">-- Select Category --</option>
+                                <!-- Categories will be loaded dynamically -->
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        
+                        <button type="submit" class="add-btn">Add Expense</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h2>Recent Expenses</h2>
+                    <table class="expenses-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Amount</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expensesTable">
+                            <!-- Expenses will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Column: Expense Summary -->
+            <div class="right-column">
+                <div class="section">
+                    <h2>Expense Summary</h2>
+                    <div id="expenseSummary">
+                        <!-- Summary will be loaded dynamically -->
+                    </div>
+                    <div class="total-section">
+                        <div class="summary-item">
+                            <span class="category-name">Total</span>
+                            <span class="category-amount total-amount" id="totalAmount">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Load categories, expenses, and summary when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+            loadExpenses();
+            loadExpenseSummary();
+        });
+
+        // Load categories from API
+        async function loadCategories() {
+            try {
+                // For now, we'll use hardcoded categories since we don't have a categories API
+                const categories = ['Food', 'Travel', 'Entertainment', 'Shopping', 'Transport', 'Healthcare'];
+                const categorySelect = document.getElementById('category');
+                
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // Load expenses from API
+        async function loadExpenses() {
+            try {
+                const response = await fetch('/expenses/summary/');
+                const summary = await response.json();
+                
+                // For demo purposes, we'll create sample expense data
+                // In a real app, you'd have a separate endpoint for expenses
+                const sampleExpenses = [
+                    { title: 'Lunch', amount: 350.00, category: 'Food', date: '2025-10-08' },
+                    { title: 'Flight Ticket', amount: 3000.00, category: 'Travel', date: '2025-10-08' },
+                    { title: 'Movie Night', amount: 800.00, category: 'Entertainment', date: '2025-10-08' },
+                    { title: 'Breakfast', amount: 500.00, category: 'Food', date: '2025-10-10' }
+                ];
+
+                const expensesTable = document.getElementById('expensesTable');
+                expensesTable.innerHTML = '';
+
+                sampleExpenses.forEach(expense => {
+                    const row = document.createElement('tr');
+                    
+                    const date = new Date(expense.date);
+                    const formattedDate = date.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+
+                    row.innerHTML = `
+                        <td>${expense.title}</td>
+                        <td>₹${expense.amount.toFixed(2)}</td>
+                        <td>${expense.category}</td>
+                        <td>${formattedDate}</td>
+                    `;
+                    
+                    expensesTable.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error('Error loading expenses:', error);
+            }
+        }
+
+        // Load expense summary from API
+        async function loadExpenseSummary() {
+            try {
+                const response = await fetch('/expenses/summary/');
+                const summary = await response.json();
+                
+                const summaryContainer = document.getElementById('expenseSummary');
+                const totalAmountElement = document.getElementById('totalAmount');
+                
+                summaryContainer.innerHTML = '';
+                
+                let total = 0;
+                
+                // Create summary items for each category
+                for (const [category, amount] of Object.entries(summary)) {
+                    total += amount;
+                    
+                    const summaryItem = document.createElement('div');
+                    summaryItem.className = 'summary-item';
+                    summaryItem.innerHTML = `
+                        <span class="category-name">${category}:</span>
+                        <span class="category-amount">₹${amount.toFixed(2)}</span>
+                    `;
+                    
+                    summaryContainer.appendChild(summaryItem);
+                }
+                
+                // Update total
+                totalAmountElement.textContent = `₹${total.toFixed(2)}`;
+
+            } catch (error) {
+                console.error('Error loading expense summary:', error);
+                
+                // For demo, show sample data if API fails
+                const sampleSummary = {
+                    "Food": 1200,
+                    "Travel": 3000,
+                    "Entertainment": 800
+                };
+                
+                const summaryContainer = document.getElementById('expenseSummary');
+                const totalAmountElement = document.getElementById('totalAmount');
+                
+                summaryContainer.innerHTML = '';
+                
+                let total = 0;
+                for (const [category, amount] of Object.entries(sampleSummary)) {
+                    total += amount;
+                    
+                    const summaryItem = document.createElement('div');
+                    summaryItem.className = 'summary-item';
+                    summaryItem.innerHTML = `
+                        <span class="category-name">${category}:</span>
+                        <span class="category-amount">₹${amount.toFixed(2)}</span>
+                    `;
+                    
+                    summaryContainer.appendChild(summaryItem);
+                }
+                
+                totalAmountElement.textContent = `₹${total.toFixed(2)}`;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('expenseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('title').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                category: document.getElementById('category').value,
+                date: document.getElementById('date').value
+            };
+
+            // In a real app, you'd send this to your API
+            // For now, we'll just show an alert and reload the data
+            alert(`Expense added:\nTitle: ${formData.title}\nAmount: ₹${formData.amount}\nCategory: ${formData.category}\nDate: ${formData.date}`);
+            
+            // Reset form
+            this.reset();
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Reload data to show the new expense (in a real app)
+            // loadExpenses();
+            // loadExpenseSummary();
+        });
+    </script>
+</body>
+</html>

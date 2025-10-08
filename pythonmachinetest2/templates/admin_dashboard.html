@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django administration</title>
+    <style>
+        /* Django Admin Exact Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+            background: #f8f8f8;
+        }
+
+        /* Header */
+        #header {
+            background: #417690;
+            color: #ffc;
+            overflow: hidden;
+            padding: 10px 40px;
+        }
+
+        #branding h1 {
+            font-weight: 300;
+            font-size: 24px;
+            color: #f5dd5d;
+            float: left;
+        }
+
+        #user-tools {
+            float: right;
+            font-size: 11px;
+        }
+
+        #user-tools a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #user-tools a:hover {
+            text-decoration: underline;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: #79aec8;
+            padding: 10px 40px;
+            border-bottom: 1px solid #417690;
+            color: #c4dce8;
+            font-size: 12px;
+        }
+
+        .breadcrumbs a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        #container {
+            display: flex;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Sidebar */
+        #content-main {
+            flex: 1;
+            padding: 20px 40px;
+        }
+
+        .module {
+            background: #fff;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .module h2 {
+            background: #79aec8;
+            color: #fff;
+            padding: 8px 16px;
+            margin: 0;
+            font-size: 14px;
+            font-weight: normal;
+            border-bottom: 1px solid #79aec8;
+        }
+
+        .module table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .module th, .module td {
+            padding: 8px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .module th {
+            background: #f8f8f8;
+            font-weight: normal;
+            color: #666;
+        }
+
+        .module a {
+            color: #5b80b2;
+            text-decoration: none;
+        }
+
+        .module a:hover {
+            color: #036;
+        }
+
+        /* Recent Actions */
+        #recent-actions-module {
+            width: 300px;
+            background: #fff;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+            margin: 20px;
+        }
+
+        /* Toggle Theme */
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #ffc;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-left: 10px;
+        }
+
+        /* Action Links */
+        .addlink, .changelink {
+            padding-left: 16px;
+            background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPjxwYXRoIGZpbGw9IiMzMzMzMzMiIGQ9Ik03LjUgM0g1VjEuNUM1IC42NzIgNC4zMjggMCAzLjUgMFMyIC42NzIgMiAxLjVWM0gxLjVDLjY3MiAzIDAgMy42NzIgMCA0LjVTLjY3MiA2IDEuNSA2SDJ2MS41YzAgLjgyOC42NzIgMS41IDEuNSAxLjVzMS41LS42NzIgMS41LTEuNVY2aDEuNWMuODI4IDAgMS41LS42NzIgMS41LTEuNVMuODI4IDMgMS41IDN6Ii8+PC9zdmc+) no-repeat 0 50%;
+        }
+
+        .changelink {
+            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPjxwYXRoIGZpbGw9IiMzMzMzMzMiIGQ9Ik03LjUgM0g1VjEuNUM1IC42NzIgNC4zMjggMCAzLjUgMFMyIC42NzIgMiAxLjVWM0gxLjVDLjY3MiAzIDAgMy42NzIgMCA0LjVTLjY3MiA2IDEuNSA2SDJ2MS41YzAgLjgyOC42NzIgMS41IDEuNSAxLjVzMS41LS42NzIgMS41LTEuNVY2aDEuNWMuODI4IDAgMS41LS42NzIgMS41LTEuNVMuODI4IDMgMS41IDN6Ii8+PC9zdmc+);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name">Django administration</h1>
+        </div>
+        <div id="user-tools">
+            Welcome, <strong>admin</strong>. 
+            <a href="/">View site</a> / 
+            <a href="/admin/password_change/">Change password</a> / 
+            <a href="/admin/logout/">Log out</a>
+            <button class="theme-toggle">Toggle theme (current theme: auto)</button>
+            <button class="theme-toggle">Toggle theme (current theme: light)</button>
+            <button class="theme-toggle">Toggle theme (current theme: dark)</button>
+        </div>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a>
+    </div>
+
+    <!-- Main Content -->
+    <div id="container">
+        <div id="content-main">
+            <!-- Site Administration -->
+            <div class="module">
+                <h2>Site administration</h2>
+            </div>
+
+            <!-- Authentication and Authorization -->
+            <div class="module">
+                <table>
+                    <caption>Authentication and Authorization</caption>
+                    <thead>
+                        <tr>
+                            <th>Model name</th>
+                            <th>Add link</th>
+                            <th>Change or view list link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Groups</td>
+                            <td><a href="/admin/auth/group/add/" class="addlink">Add</a></td>
+                            <td><a href="/admin/auth/group/" class="changelink">Change</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Expenses -->
+            <div class="module">
+                <table>
+                    <caption>Expenses</caption>
+                    <thead>
+                        <tr>
+                            <th>Model name</th>
+                            <th>Add link</th>
+                            <th>Change or view list link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Categorys</td>
+                            <td><a href="/admin/expenses/category/add/" class="addlink">Add</a></td>
+                            <td><a href="/admin/expenses/category/" class="changelink">Change</a></td>
+                        </tr>
+                        <tr>
+                            <td>Expenses</td>
+                            <td><a href="/admin/expenses/expense/add/" class="addlink">Add</a></td>
+                            <td><a href="/admin/expenses/expense/" class="changelink">Change</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Users -->
+            <div class="module">
+                <table>
+                    <caption>Users</caption>
+                    <thead>
+                        <tr>
+                            <th>Model name</th>
+                            <th>Add link</th>
+                            <th>Change or view list link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Users</td>
+                            <td><a href="/admin/users/customuser/add/" class="addlink">Add</a></td>
+                            <td><a href="/admin/users/customuser/" class="changelink">Change</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Actions Sidebar -->
+        <div id="recent-actions-module">
+            <h2>Recent actions</h2>
+            <h3>My actions</h3>
+            <p>None available</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple theme toggle functionality
+        document.querySelectorAll('.theme-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                // Just for show - in real Django admin this would change themes
+                alert('Theme toggle clicked - this is a demo of the Django admin interface');
+            });
+        });
+    </script>
+</body>
+</html>
