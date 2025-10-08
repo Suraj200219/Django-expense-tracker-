@@ -5,7 +5,7 @@ A Django REST API project for user management and expense tracking.
 ## Setup Instructions
 
 1. Clone the repository
-2. Create virtual environment: `python -m venv venv`
+2. Create virtual environment: `python -m venv`
 3. Activate virtual environment:
    - Windows: `venv\Scripts\activate`
    - Mac/Linux: `source venv/bin/activate`
@@ -22,4 +22,5 @@ python manage.py runserver
 Test Superuser Account :
 - Username: test1
 - Email: test123@gmail.com
+
 - Password: Suraj@123
